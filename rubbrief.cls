@@ -1,12 +1,12 @@
 %% this is file statbook.cls
-\ProvidesClass{rubbiref}[2011/01/13 v1.0 Book template LS Statistik]
+\ProvidesClass{rubbrief}[03/02/11 13:21:53]
 
 % Minimale LaTeX-Version
 \NeedsTeXFormat{LaTeX2e}
 
 % Die Einstellungen von Koma-Script laden und auf die Version 33 fixieren.
-\PassOptionsToClass{version=3.05}{scrartcl} 
-\LoadClassWithOptions{scrartcl}
+\PassOptionsToClass{version=3.05}{scrlttr2} 
+\LoadClassWithOptions{scrlttr2}
 
 % Seitenränder
 \RequirePackage{geometry} 
@@ -15,9 +15,10 @@
 % TTF-Schriften für sans und serif setzen
 \RequirePackage[newstyle]{rubscala}
 \RequirePackage{rubflama}
-
+\RequirePackage[ngerman]{babel}
 \fontsize{11pt}{14pt} % Schriftgröße für den Fließtext
-\RequirePackage{soulutf8}
+\RequirePackage{microtype}
+
 
 
 %  Keine Einzüge, dafür aber größere Absätze
@@ -54,7 +55,7 @@
 {}{}{
 \hspace{-3mm}
 \begin{tabular}{ll}
-  \textbf{ADRESSE} &Universitätsstraße 150 | 44801 Bochum, Germany\\
+  \textbf{ADRESSE} &Universit\"{a}tsstra\"{ss}e 150 | 44801 Bochum, Germany\\
   \textbf{ANFAHRT} &U-Bahn: U35 | Auto: A43, Abfahrt (19) Bochum Witten\\
   \end{tabular}\hfill
 \ifthenelse{\boolean{vordruck}}{}{\fontsize{11pt}{11pt}\selectfont\color{gelbgruen}{WWW.RUB.DE}}}
@@ -75,39 +76,58 @@
 \newcommand{\betreff}[1]{\parbox[t][16.117mm][t]{\textwidth}{\textbf{#1}}}
 
 % Formatierung für den Adressbereich
-\newcommand{\adresse}[1]{
+\newcommand{\adresse}{
 \parbox[t][68mm][t]{10.3cm}{ % 58mm bis zum Anfang + 63mm bis zum betreff
 \fontsize{7pt}{10pt}
 \selectfont
-\sffamily \textbf{RUHR-UNIVERSITÄT} BOCHUM | 44780 Bochum | Germany\\[-3pt]
-2. Absenderzeile\\[3mm]
+\sffamily \usekomavar{backaddress}\\[3mm]
 % Adresse
 \fontsize{11pt}{14pt}
 \selectfont
 \rmfamily
-#1}}
+\usekomavar{toname}\\[0.5ex]
+\usekomavar{toaddress}
+}}
 \date{\today}
+
 % Formatierung für den Absenderbereich
-\newcommand{\absender}[1]{
+\newkomavar{frominstitute}
+\newkomavar{frombuilding}
+\newkomavar{fromfaculty}
+
+\newcommand{\absender}{
 \hspace{1.5cm} % Der Absenderblock wird wie das Logo um 1.5cm nach recht verschoben
 \parbox[t][68mm][t]{5.68cm}{
 \sffamily 
 \fontsize{8pt}{12pt}
 \selectfont
-\textbf{\color{gelbgruen} \so{FAKULTÄT FÜR\\ SOZIALWISSENSCHAFT} }\\[2mm]
+\textbf{\color{gelbgruen} \textls*[100]{\usekomavar{fromfaculty}} }\\[2mm]
 \fontsize{8pt}{12pt}
 \selectfont
-#1
+\textbf{\usekomavar{frominstitute}}\\
+\usekomavar{frombuilding}\\
+\usekomavar{fromaddress}\\
 \\
-\textbf{\today}
-% TODO: Möglichkeit finden mit \date ein Datum anzugeben
+\textbf{\usekomavar{fromname}}\\
+Fon  \usekomavar{fromphone}\\
+Fax  \usekomavar{fromfax}\\
+\usekomavar{fromemail}\\
+\usekomavar{fromurl}\\
+\\
+\textbf{\@date}
 }}
 
 %Deklaration der Variable "vordruck", um vorgedruckte Elemente auszublenden
 % TODO: Falls der Name der Fakultät ebenfalls vorgedruckt wird, diesen ebenfalls einbeziehen.
 \RequirePackage{ifthen} %Paket einbinden
 \newboolean{vordruck}  
-    
+
+\DeclareOption{vorlage=true}{\setboolean{vordruck}{true}}
+\DeclareOption{vorlage=false}{\setboolean{vordruck}{false}}
+\ExecuteOptions{vorlage=false}
+\ProcessOptions\relax
+ 
     % Hier wird der Stil für die erste Seite festgelegt
-\AtBeginDocument{\thispagestyle{firstpage}}
+\AtBeginDocument{\thispagestyle{firstpage}
+                \adresse\hfill\absender }
 \AtEndDocument{\label{LastPage}}
