@@ -81,8 +81,8 @@
 \newcommand{\faltmarken}{
 \begin{picture}(0,0)
 \unitlength1mm
- \put(-20,- 75.16){\line(1,0){3}}
-      \put(-20,-182.16){\line(1,0){3}}
+ \put(-20,-60.16){\line(1,0){3}}
+      \put(-20,-160.16){\line(1,0){3}}
 \end{picture}\hspace{-1.5mm}
 }
 
@@ -115,6 +115,7 @@
 
 % Bereich für Adressfeld reservieren
 \newcommand{\adressfeld}[1]{\parbox[t][68mm][t]{10.3cm}{#1}} % 58mm bis zum Anfang + 63mm bis zum betreff
+\newcommand{\adressfeldempty}{\parbox[t][1mm][t]{10.3cm}{~}} % 58mm bis zum Anfang + 63mm bis zum betreff
 
 % Adresse inkl. Rückantwortadresse setzen
 \newcommand{\adresse}{
@@ -134,9 +135,13 @@
 \newkomavar{frombuilding}
 \newkomavar{fromfaculty}
 
+
+% Größe des Absenderbereichs anpassen, wenn keine Adresse angegeben wurde.
+
+
 \newcommand{\absender}{
 % Der Absenderblock wird wie das Logo um 1.5cm nach recht verschoben
-\parbox[t][68mm][t]{5.68cm}{
+\parbox[t][45mm][t]{5.68cm}{ % Keine Feste Breite vorgeben
 \sffamily 
 \fontsize{8pt}{12pt}
 \selectfont
@@ -227,7 +232,8 @@
 
 \AtBeginDocument{\thispagestyle{firstpage}
                 \ifthenelse{\boolean{fm}}{\faltmarken}{}
-                \ifthenelse{\boolean{addrfield}}{\adressfeld{\adresse}}{\adressfeld{~}}\hspace{1.5cm}\absender 
+                %\ifthenelse{\boolean{addrfield}}{\adressfeld{\adresse}}{\adressfeld{~}}\hspace{1.5cm}\absender 
+                \ifthenelse{\boolean{addrfield}}{\adressfeld{\adresse}}{\adressfeldempty}\hspace{1.5cm}\absender 
              
                 % Formatierung der Betreffzeile, feste Höhe um den Text bei der richtigen Höhe beginnen zu lassen
                 \parbox[t][16.117mm][t]{\textwidth}{
@@ -235,4 +241,4 @@
                 \ifkomavarempty{title}{}{\textbf{\large\sffamily \usekomavar{title}}\par}}
                 }
 
-\AtEndDocument{\label{LastPage}}}
+\AtEndDocument{\label{LastPage}}
