@@ -12,12 +12,24 @@
 \RequirePackage{geometry} 
 \geometry{a4paper, bottom=25mm, left=25mm, right=20mm, top=45mm, headheight=22mm, headsep=16mm, footskip=17mm} %headsep muss für die erste Seite wieder mit vspace*{} am Dokumentanfang verkürzt werden.
 
+% Standardschriftart anpassen
 % TTF-Schriften für sans und serif setzen
-\RequirePackage[newstyle]{rubscala}
-\RequirePackage{rubflama}
+\RequirePackage{ifxetex,ifluatex}
+\ifnum 0=\ifxetex 1\else\ifluatex 1\else 0\fi\fi\relax
+  \RequirePackage[newstyle]{rubscala}
+  \RequirePackage{rubflama}
+  \RequirePackage{microtype}
+  \newcommand{\makels}[1]{\textls*{#1}}
+\else
+  \RequirePackage{fontspec}
+  \setmainfont{RUB Scala TZ} % Standardschrift
+  \setsansfont{RubFlama} % serifenlose Schrift
+  \newcommand{\makels}[1]{{\addfontfeature{LetterSpace=12}#1}}
+\fi
+
+
 
 \fontsize{11pt}{14pt} % Schriftgröße für den Fließtext
-\RequirePackage{microtype}
 
 %  Keine Einzüge, dafür aber größere Absätze
 \setlength{\parindent}{0ex}
@@ -29,6 +41,12 @@
 
 % Berechnungen
 \RequirePackage{calc}
+
+% Farben definieren
+\RequirePackage{xcolor}
+\definecolor{gelbgruen}{cmyk}{0.5,0,1,0}
+\definecolor{lichtgrau}{cmyk}{.03,.03,.03,.1}
+\definecolor{saphierblau}{cmyk}{1,0.5,0,.6}
 
 % Grafiken
 \RequirePackage{graphicx}
@@ -56,18 +74,12 @@
   \textbf{ADRESSE} &Universit\"{a}tsstra\"{ss}e 150 | 44801 Bochum, Germany\\
   \textbf{ANFAHRT} &U-Bahn: U35 | Auto: A43, Abfahrt (19) Bochum Witten\\
   \end{tabular}\hfill
-\ifthenelse{\boolean{vordruck}}{}{\fontsize{11pt}{11pt}\selectfont\color{gelbgruen}{WWW.RUB.DE}}}
+\ifthenelse{\boolean{vordruck}}{}{\fontsize{11pt}{11pt}\selectfont\textcolor{gelbgruen}{WWW.RUB.DE}}}
 }
 
 % Schriftart für die Fußzeile setzen
 \setkomafont{pagehead}{\normalfont\sffamily\fontsize{8pt}{8pt}\selectfont}
 \renewcommand{\pnumfont}{\sffamily\fontsize{8pt}{8pt}\selectfont}
-
-% Farben definieren
-\RequirePackage{color}
-\definecolor{gelbgruen}{cmyk}{0.5,0,1,0}
-\definecolor{lichtgrau}{cmyk}{.03,.03,.03,.1}
-\definecolor{saphierblau}{cmyk}{1,0.5,0,.6}
 
 %Auszeichnungskommandos
 \RequirePackage{ifthen} %Paket einbinden
@@ -145,7 +157,7 @@
 \sffamily 
 \fontsize{8pt}{12pt}
 \selectfont
-\textbf{\color{gelbgruen} \textls*[100]{\usekomavar{fromfaculty}}}\\[2mm]
+\textbf{\textcolor{gelbgruen}{\makels{\usekomavar{fromfaculty}}}}\\[2mm]
 \fontsize{8pt}{12pt}
 \selectfont
 \ifkomavarempty{frominstitute}{}{\textbf{\usekomavar{frominstitute}}\\}
