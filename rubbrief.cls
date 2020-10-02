@@ -22,8 +22,8 @@
   \newcommand{\makels}[1]{\textls*{#1}}
 \else
   \RequirePackage{fontspec}
-  \setmainfont{RUB Scala TZ} % Standardschrift
-  \setsansfont{RubFlama} % serifenlose Schrift
+  \setmainfont{RUB Scala TZ} % Standardschrift (Dateiname oder Schriftname)
+  \setsansfont{RubFlama} % Serifenlose Schrift
   \newcommand{\makels}[1]{{\addfontfeature{LetterSpace=12}#1}}
 \fi
 
@@ -36,7 +36,7 @@
 \setlength{\parskip}{11pt}
 
 % Kopfzeile und Seitennummern ab Seite zwei formatieren.
-\RequirePackage{scrpage2}
+\RequirePackage{scrlayer-scrpage}
 \pagestyle{scrheadings}
 
 % Berechnungen
@@ -71,7 +71,7 @@
 {}{}{
 \hspace{-3mm}
 \begin{tabular}{ll}
-  \textbf{ADRESSE} &Universit\"{a}tsstra\"{ss}e 150 | 44801 Bochum, Germany\\
+  \textbf{ADRESSE} &Universitätsstraße 150 | 44801 Bochum, Germany\\
   \textbf{ANFAHRT} &U-Bahn: U35 | Auto: A43, Abfahrt (19) Bochum Witten\\
   \end{tabular}\hfill
 \ifthenelse{\boolean{vordruck}}{}{\fontsize{11pt}{11pt}\selectfont\textcolor{gelbgruen}{WWW.RUB.DE}}}
@@ -79,6 +79,7 @@
 
 % Schriftart für die Fußzeile setzen
 \setkomafont{pagehead}{\normalfont\sffamily\fontsize{8pt}{8pt}\selectfont}
+\setkomafont{pagefoot}{\normalfont\sffamily\fontsize{8pt}{8pt}\selectfont}
 \renewcommand{\pnumfont}{\sffamily\fontsize{8pt}{8pt}\selectfont}
 
 %Auszeichnungskommandos
@@ -114,7 +115,7 @@
 \newcommand{\antwortadresse}{
 \ifthenelse{\boolean{backaddress}}{
 \sffamily \fontsize{7pt}{8pt} \selectfont
-\ifkomavarempty{backaddress}{}{\textbf{RUHR-UNIVERSIT\"AT} BOCHUM | 44780 Bochum | Germany\\[-4pt]
+\Ifkomavarempty{backaddress}{}{\textbf{RUHR-UNIVERSITÄT} BOCHUM | 44780 Bochum | Germany\\[-4pt]
 \usekomavar{backaddress}\\[3mm]}
 }{}
 }
@@ -149,8 +150,6 @@
 
 
 % Größe des Absenderbereichs anpassen, wenn keine Adresse angegeben wurde.
-
-
 \newcommand{\absender}{
 % Der Absenderblock wird wie das Logo um 1.5cm nach recht verschoben
 \parbox[t][45mm][t]{5.68cm}{ % Keine Feste Breite vorgeben
@@ -160,13 +159,13 @@
 \textbf{\textcolor{gelbgruen}{\makels{\usekomavar{fromfaculty}}}}\\[2mm]
 \fontsize{8pt}{12pt}
 \selectfont
-\ifkomavarempty{frominstitute}{}{\textbf{\usekomavar{frominstitute}}\\}
-\ifkomavarempty{fromaddress}{}{\ifkomavarempty{frombuilding}{}{\usekomavar{frombuilding}\\}\usekomavar{fromaddress}\\[1em]}
-\ifkomavarempty{fromname}{}{\textbf{\usekomavar{fromname}}\\}
-\ifkomavarempty{fromphone}{}{Fon  \usekomavar{fromphone}\\}
-\ifkomavarempty{fromfax}{}{Fax  \usekomavar{fromfax}\\}
-\ifkomavarempty{fromemail}{}{\usekomavar{fromemail}\\}
-\ifkomavarempty{fromurl}{}{\usekomavar{fromurl}\\}
+\Ifkomavarempty{frominstitute}{}{\textbf{\usekomavar{frominstitute}}\\}
+\Ifkomavarempty{fromaddress}{}{\Ifkomavarempty{frombuilding}{}{\usekomavar{frombuilding}\\}\usekomavar{fromaddress}\\[1em]}
+\Ifkomavarempty{fromname}{}{\textbf{\usekomavar{fromname}}\\}
+\Ifkomavarempty{fromphone}{}{Fon  \usekomavar{fromphone}\\}
+\Ifkomavarempty{fromfax}{}{Fax  \usekomavar{fromfax}\\}
+\Ifkomavarempty{fromemail}{}{\usekomavar{fromemail}\\}
+\Ifkomavarempty{fromurl}{}{\usekomavar{fromurl}\\}
 \\
 \textbf{\@date}
 }}
@@ -244,13 +243,12 @@
 
 \AtBeginDocument{\thispagestyle{firstpage}
                 \ifthenelse{\boolean{fm}}{\faltmarken}{}
-                %\ifthenelse{\boolean{addrfield}}{\adressfeld{\adresse}}{\adressfeld{~}}\hspace{1.5cm}\absender 
                 \ifthenelse{\boolean{addrfield}}{\adressfeld{\adresse}}{\adressfeldempty}\hspace{1.5cm}\absender 
              
                 % Formatierung der Betreffzeile, feste Höhe um den Text bei der richtigen Höhe beginnen zu lassen
                 \parbox[t][16.117mm][t]{\textwidth}{
-                \ifkomavarempty{subject}{\newline}{\textbf{\sffamily \usekomavar{subject}}\\[0.2em]}
-                \ifkomavarempty{title}{}{\textbf{\large\sffamily \usekomavar{title}}\par}}
+                \Ifkomavarempty{subject}{\newline}{\textbf{\sffamily \usekomavar{subject}}\\[0.2em]}
+                \Ifkomavarempty{title}{}{\textbf{\large\sffamily \usekomavar{title}}\par}}
                 }
 
 \AtEndDocument{\label{LastPage}}
